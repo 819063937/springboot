@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lyz.admin.mapper.UserMapper">
+    <resultMap id="userMap" type="com.lyz.admin.entity.UserEntity">
+        <id column="id" property="id"></id>
+        <result column="user_account" property="userAccount"></result>
+        <result column="username" property="username"></result>
+        <result column="user_password" property="userPassword"></result>
+        <result column="gender" property="gender"></result>
+        <result column="birthday" property="birthday"></result>
+        <result column="phone_number" property="phoneNumber"></result>
+        <result column="mail_address" property="mailAddress"></result>
+        <result column="head_address" property="headAddress"></result>
+        <result column="status" property="status"></result>
+        <result column="last_login_time" property="lastLoginTime"></result>
+        <result column="password_time" property="passwordTime"></result>
+        <result column="dept_id" property="deptId"></result>
+        <result column="delete_flg" property="deleteFlg"></result>
+        <result column="create_user" property="createUser"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_user" property="updateUser"></result>
+        <result column="update_time" property="updateTime"></result>
+    </resultMap>
+
+    <sql id="userCol">
+            id,
+            user_account,
+            username,
+            user_password,
+            gender,
+            birthday,
+            phone_number,
+            mail_address,
+            head_address,
+            status,
+            last_login_time,
+            password_time,
+            dept_id,
+            delete_flg,
+            create_user,
+            create_time,
+            update_user,
+            update_time
+    </sql>
+
+    <select id="queryUserCount" resultType="int">
+        select count(*) from sys_user
+        <include refid="userWhere"/>
+    </select>
+
+    <select id="queryUserList" resultMap="userMap">
+        select
+        <include refid="userCol"/>
+        from sys_user
+        <include refid="userWhere"/>
+        <if test="startIndex != null and pageSize != null">
+            limit #{startIndex},#{pageSize}
+        </if>
+    </select>
+
+    <sql id="userWhere">
+        <where>
+            <if test="id != null ">
+                and id = #{id}
+            </if>
+            <if test="userAccount != null and userAccount != '' ">
+                and user_account = #{userAccount}
+            </if>
+            <if test="username != null and username != '' ">
+                and username = #{username}
+            </if>
+            <if test="userPassword != null and userPassword != '' ">
+                and user_password = #{userPassword}
+            </if>
+            <if test="gender != null ">
+                and gender = #{gender}
+            </if>
+            <if test="birthdayStart != null and birthdayStart != ''">
+                and birthday &gt;= #{birthdayStart}
+            </if>
+            <if test="birthdayEnd != null and birthdayEnd != ''">
+                and birthday &lt;= #{birthdayEnd}
+            </if>
+            <if test="phoneNumber != null and phoneNumber != '' ">
+                and phone_number = #{phoneNumber}
+            </if>
+            <if test="mailAddress != null and mailAddress != '' ">
+                and mail_address = #{mailAddress}
+            </if>
+            <if test="headAddress != null and headAddress != '' ">
+                and head_address = #{headAddress}
+            </if>
+            <if test="status != null ">
+                and status = #{status}
+            </if>
+            <if test="lastLoginTimeStart != null and lastLoginTimeStart != ''">
+                and last_login_time &gt;= #{lastLoginTimeStart}
+            </if>
+            <if test="lastLoginTimeEnd != null and lastLoginTimeEnd != ''">
+                and last_login_time &lt;= #{lastLoginTimeEnd}
+            </if>
+            <if test="passwordTimeStart != null and passwordTimeStart != ''">
+                and password_time &gt;= #{passwordTimeStart}
+            </if>
+            <if test="passwordTimeEnd != null and passwordTimeEnd != ''">
+                and password_time &lt;= #{passwordTimeEnd}
+            </if>
+            <if test="deptId != null ">
+                and dept_id = #{deptId}
+            </if>
+            <if test="deleteFlg != null ">
+                and delete_flg = #{deleteFlg}
+            </if>
+            <if test="createUser != null and createUser != '' ">
+                and create_user = #{createUser}
+            </if>
+            <if test="createTimeStart != null and createTimeStart != ''">
+                and create_time &gt;= #{createTimeStart}
+            </if>
+            <if test="createTimeEnd != null and createTimeEnd != ''">
+                and create_time &lt;= #{createTimeEnd}
+            </if>
+            <if test="updateUser != null and updateUser != '' ">
+                and update_user = #{updateUser}
+            </if>
+            <if test="updateTimeStart != null and updateTimeStart != ''">
+                and update_time &gt;= #{updateTimeStart}
+            </if>
+            <if test="updateTimeEnd != null and updateTimeEnd != ''">
+                and update_time &lt;= #{updateTimeEnd}
+            </if>
+            <if test="ids != null and ids.size() > 0 ">
+                and id in
+                <foreach collection="ids" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <select id="getUserById" resultMap="userMap">
+        select
+        <include refid="userCol"/>
+        from sys_user where id = #{id}
+    </select>
+
+    <insert id="insertUser" parameterType="com.lyz.admin.entity.UserEntity">
+        insert into sys_user
+        <trim suffixOverrides="," prefix="(" suffix=")">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userAccount != null">
+                user_account,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="userPassword != null">
+                user_password,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="birthday != null">
+                birthday,
+            </if>
+            <if test="phoneNumber != null">
+                phone_number,
+            </if>
+            <if test="mailAddress != null">
+                mail_address,
+            </if>
+            <if test="headAddress != null">
+                head_address,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time,
+            </if>
+            <if test="passwordTime != null">
+                password_time,
+            </if>
+            <if test="deptId != null">
+                dept_id,
+            </if>
+            <if test="deleteFlg != null">
+                delete_flg,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="updateTime != null">
+                update_time
+            </if>
+        </trim>
+        values
+        <trim suffixOverrides="," prefix="(" suffix=")">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="userAccount != null">
+                #{userAccount},
+            </if>
+            <if test="username != null">
+                #{username},
+            </if>
+            <if test="userPassword != null">
+                #{userPassword},
+            </if>
+            <if test="gender != null">
+                #{gender},
+            </if>
+            <if test="birthday != null">
+                #{birthday},
+            </if>
+            <if test="phoneNumber != null">
+                #{phoneNumber},
+            </if>
+            <if test="mailAddress != null">
+                #{mailAddress},
+            </if>
+            <if test="headAddress != null">
+                #{headAddress},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="lastLoginTime != null">
+                #{lastLoginTime},
+            </if>
+            <if test="passwordTime != null">
+                #{passwordTime},
+            </if>
+            <if test="deptId != null">
+                #{deptId},
+            </if>
+            <if test="deleteFlg != null">
+                #{deleteFlg},
+            </if>
+            <if test="createUser != null">
+                #{createUser},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime}
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsertUser">
+        insert into sys_user ( id,
+        user_account,
+        username,
+        user_password,
+        gender,
+        birthday,
+        phone_number,
+        mail_address,
+        head_address,
+        status,
+        last_login_time,
+        password_time,
+        dept_id,
+        delete_flg,
+        create_user,
+        create_time,
+        update_user,
+        update_time)
+        values
+        <foreach collection="userEntitys" item="item" separator=",">
+            ( #{item.id},
+            #{item.userAccount},
+            #{item.username},
+            #{item.userPassword},
+            #{item.gender},
+            #{item.birthday},
+            #{item.phoneNumber},
+            #{item.mailAddress},
+            #{item.headAddress},
+            #{item.status},
+            #{item.lastLoginTime},
+            #{item.passwordTime},
+            #{item.deptId},
+            #{item.deleteFlg},
+            #{item.createUser},
+            #{item.createTime},
+            #{item.updateUser},
+            #{item.updateTime})
+        </foreach>
+    </insert>
+
+    <update id="updateUser">
+        update sys_user
+        <set>
+            <if test="userAccount != null ">
+                user_account = #{userAccount},
+            </if>
+            <if test="username != null ">
+                username = #{username},
+            </if>
+            <if test="userPassword != null ">
+                user_password = #{userPassword},
+            </if>
+            <if test="gender != null ">
+                gender = #{gender},
+            </if>
+            <if test="birthday != null ">
+                birthday = #{birthday},
+            </if>
+            <if test="phoneNumber != null ">
+                phone_number = #{phoneNumber},
+            </if>
+            <if test="mailAddress != null ">
+                mail_address = #{mailAddress},
+            </if>
+            <if test="headAddress != null ">
+                head_address = #{headAddress},
+            </if>
+            <if test="status != null ">
+                status = #{status},
+            </if>
+            <if test="lastLoginTime != null ">
+                last_login_time = #{lastLoginTime},
+            </if>
+            <if test="passwordTime != null ">
+                password_time = #{passwordTime},
+            </if>
+            <if test="deptId != null ">
+                dept_id = #{deptId},
+            </if>
+            <if test="deleteFlg != null ">
+                delete_flg = #{deleteFlg},
+            </if>
+            <if test="updateUser != null ">
+                update_user = #{updateUser},
+            </if>
+            <if test="updateTime != null ">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="deleteUser">
+        update sys_user set delete_flg = 1
+        <if test="updateUser != null and updateUser != ''">
+            ,update_user = #{updateUser}
+        </if>
+        <if test="updateTime != null ">
+            ,update_time = #{updateTime}
+        </if>
+        where id in
+        <foreach collection="ids" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>
